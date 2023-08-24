@@ -1,0 +1,11 @@
+{
+  "name": "building_node_server",
+  "version": "1.0.0",
+  "description": "Exploring and Implementing a Node Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James Lovejoy",
+  "license": "ISC"
+}
