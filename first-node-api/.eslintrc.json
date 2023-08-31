@@ -2,5 +2,14 @@
   "extends": "standard",
   "rules": {
     "no-var": ["warn"]
-  }
+  },
+  "overrides": [
+    {
+      "files": [ "**/*.js", "**/*.ts"],
+      "extends": ["plugin:prettier/recommended"],
+      "rules": {
+
+      }
+    }
+  ]
 }
