@@ -17,6 +17,8 @@ function respondNotFound (req, res) {
 function respondChat (req, res) {
     const { message } = req.query;
 
+    if(message) logChat(message);
+
     chatEmitter.emit('message', message)
     res.end()
 }
@@ -27,6 +29,9 @@ function respondSSE (req, res) {
         'Connection': 'keep-alive'
     })
 
+    // const prevMsgs = getPreviousMessages()
+    // console.log(prevMsgs)
+
     const onMessage = msg => res.write(`data: ${msg}\n\n`)
     chatEmitter.on('message', onMessage)
 
@@ -35,6 +40,18 @@ function respondSSE (req, res) {
     })
 }
 
+function logChat(message) {
+    let messages = getPreviousMessages();
+    try {
+        messages.push(message)
+        const filePath = `${__dirname}/public/chatlog.js`
+        fs.writeFileSync(filePath, JSON.stringify(messages))
+
+        console.log('message added to log ...');
+    } catch (err) {
+        console.error('Error occurred when logging the message', err, message)
+    }
+}
 
 function respondStatic (req, res) {
     const filename = `${__dirname}/public/${req.params[0]}`
@@ -44,9 +61,36 @@ function respondStatic (req, res) {
     fs.createReadStream(filename)
       .on('error', () => respondNotFound(req, res))
       .pipe(res)
-  }
+}
+
+function getPreviousMessages () {
+    const filePath = `${__dirname}/public/chatlog.js`
+
+    if (fs.existsSync(filePath)) {
+    const previousMessages = JSON.parse(fs.readFileSync(filePath));
+    return previousMessages;
+    } else {
+        const messages = [];
+        fs.writeFileSync(filePath, JSON.stringify(messages))
+        return messages;
+    }
+}
+
+function respondPrevMsgs (req, res) {
+    const filePath = `${__dirname}/public/chatlog.js`
+    let prevMsgs = [];
+    if (fs.existsSync(filePath)) {
+    prevMsgs = JSON.parse(fs.readFileSync(filePath));
+    } else {
+        fs.writeFileSync(filePath, JSON.stringify(prevMsgs))
+    }
+
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(prevMsgs));
+}
 
 app.get('/chat', respondChat)
+app.get('/prevMsgs', respondPrevMsgs)
 app.get('/sse', respondSSE)
 app.get('/static/*', respondStatic)
 

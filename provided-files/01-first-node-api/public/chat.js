@@ -1,4 +1,5 @@
 new window.EventSource('/sse').onmessage = function (event) {
+  console.log('sse...', event)
   window.messages.innerHTML += `<p>${event.data}</p>`
 }
 
