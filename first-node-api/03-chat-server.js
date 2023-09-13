@@ -16,7 +16,7 @@ function respondNotFound (req, res) {
 
 function respondChat (req, res) {
     const { message } = req.query;
-
+    console.log('got a chat message: ', message)
     if(message) logChat(message);
 
     chatEmitter.emit('message', message)

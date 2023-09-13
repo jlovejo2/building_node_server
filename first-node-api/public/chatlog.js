@@ -1,1 +1,1 @@
-["Hi there","howdy","asdfasdfdf","who was the last one to respond?","i dunno"]
+["Hi there","howdy","asdfasdfdf","who was the last one to respond?","i dunno","Hello!","can you hear me?","can you hear me still?"]
