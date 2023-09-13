@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-// running this file in node will list all the files and there lengths in a specified directory;
+// running this file in node will list all the files and there lengths in a specified directory
 
 const targetDirectory = process.argv[2] || './';
 
